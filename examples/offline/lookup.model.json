@@ -1,0 +1,7 @@
+[
+  {"tool": "fill", "input": {"element": 1, "param": "member_id", "reason": "enter member number"}},
+  {"tool": "click", "input": {"element": 2, "reason": "run inquiry"}},
+  {"tool": "extract", "input": {"output": "savings_balance", "type": "decimal", "frame": "workarea",
+     "locator": {"kind": "table_cell", "column": "BALANCE", "row_match": "SAVINGS"}, "reason": "read balance"}},
+  {"tool": "finish", "input": {"status": "success", "summary": "read balance", "checkpoint_text": "MEMBER DETAIL"}}
+]

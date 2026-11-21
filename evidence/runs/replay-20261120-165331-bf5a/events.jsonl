@@ -1,0 +1,20 @@
+{"ts": "2026-11-20T22:53:32.057+00:00", "seq": 1, "run_id": "replay-20261120-165331-bf5a", "type": "replay_start", "capability": "mockcore.lookup_member_balance@1.0.0", "status": "approved", "risk": "read_only", "params": {"member_id": "12345"}}
+{"ts": "2026-11-20T22:53:32.057+00:00", "seq": 2, "run_id": "replay-20261120-165331-bf5a", "type": "dependency_start", "capability": "mockcore.sign_on@1.0.0"}
+{"ts": "2026-11-20T22:53:32.083+00:00", "seq": 3, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "fill_user_id", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:32.264+00:00", "seq": 4, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 0, "id": "fill_user_id", "action": "fill", "value": "{{secret.mockbank_user}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:32.269+00:00", "seq": 5, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "fill_password", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:32.469+00:00", "seq": 6, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 1, "id": "fill_password", "action": "fill", "value": "{{secret.mockbank_password}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:32.473+00:00", "seq": 7, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "click_sign_on", "action": "click", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:32.673+00:00", "seq": 8, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 2, "id": "click_sign_on", "action": "click", "value": null, "locator_used": 0, "locator": "role", "source": "agent"}
+{"ts": "2026-11-20T22:53:35.555+00:00", "seq": 9, "run_id": "replay-20261120-165331-bf5a", "type": "expect_ok", "step": "click_sign_on"}
+{"ts": "2026-11-20T22:53:35.563+00:00", "seq": 10, "run_id": "replay-20261120-165331-bf5a", "type": "dependency_passed", "capability": "mockcore.sign_on@1.0.0"}
+{"ts": "2026-11-20T22:53:35.576+00:00", "seq": 11, "run_id": "replay-20261120-165331-bf5a", "type": "navigate", "path": "/"}
+{"ts": "2026-11-20T22:53:35.601+00:00", "seq": 12, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "fill_member_number", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:35.767+00:00", "seq": 13, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 0, "id": "fill_member_number", "action": "fill", "value": "{{param.member_id}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:35.779+00:00", "seq": 14, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "click_inquire", "action": "click", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:35.957+00:00", "seq": 15, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 1, "id": "click_inquire", "action": "click", "value": null, "locator_used": 0, "locator": "role", "source": "agent"}
+{"ts": "2026-11-20T22:53:35.971+00:00", "seq": 16, "run_id": "replay-20261120-165331-bf5a", "type": "expect_ok", "step": "click_inquire"}
+{"ts": "2026-11-20T22:53:35.974+00:00", "seq": 17, "run_id": "replay-20261120-165331-bf5a", "type": "policy_check", "step": "extract_savings_balance", "action": "extract", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:35.977+00:00", "seq": 18, "run_id": "replay-20261120-165331-bf5a", "type": "step", "index": 2, "id": "extract_savings_balance", "action": "extract", "output": "savings_balance", "value": "1520.75", "locator_used": 0, "locator": "table_cell"}
+{"ts": "2026-11-20T22:53:36.023+00:00", "seq": 19, "run_id": "replay-20261120-165331-bf5a", "type": "checkpoint_passed", "evidence": {"screenshot": "evidence/runs/replay-20261120-165331-bf5a/shots/018-checkpoint.png"}}
+{"ts": "2026-11-20T22:53:36.024+00:00", "seq": 20, "run_id": "replay-20261120-165331-bf5a", "type": "replay_end", "status": "success", "steps_completed": 3, "duration_ms": 4266}

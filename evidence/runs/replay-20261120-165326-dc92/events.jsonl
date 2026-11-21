@@ -1,0 +1,22 @@
+{"ts": "2026-11-20T22:53:27.254+00:00", "seq": 1, "run_id": "replay-20261120-165326-dc92", "type": "replay_start", "capability": "mockcore.lookup_member_balance@1.0.0", "status": "approved", "risk": "read_only", "params": {"member_id": "12345"}}
+{"ts": "2026-11-20T22:53:27.254+00:00", "seq": 2, "run_id": "replay-20261120-165326-dc92", "type": "dependency_start", "capability": "mockcore.sign_on@1.0.0"}
+{"ts": "2026-11-20T22:53:27.280+00:00", "seq": 3, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "fill_user_id", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:27.460+00:00", "seq": 4, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 0, "id": "fill_user_id", "action": "fill", "value": "{{secret.mockbank_user}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:27.466+00:00", "seq": 5, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "fill_password", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:27.662+00:00", "seq": 6, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 1, "id": "fill_password", "action": "fill", "value": "{{secret.mockbank_password}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:27.667+00:00", "seq": 7, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "click_sign_on", "action": "click", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:27.854+00:00", "seq": 8, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 2, "id": "click_sign_on", "action": "click", "value": null, "locator_used": 0, "locator": "role", "source": "agent"}
+{"ts": "2026-11-20T22:53:27.884+00:00", "seq": 9, "run_id": "replay-20261120-165326-dc92", "type": "expect_ok", "step": "click_sign_on"}
+{"ts": "2026-11-20T22:53:27.887+00:00", "seq": 10, "run_id": "replay-20261120-165326-dc92", "type": "dependency_passed", "capability": "mockcore.sign_on@1.0.0"}
+{"ts": "2026-11-20T22:53:27.898+00:00", "seq": 11, "run_id": "replay-20261120-165326-dc92", "type": "navigate", "path": "/"}
+{"ts": "2026-11-20T22:53:27.919+00:00", "seq": 12, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "fill_member_number", "action": "fill", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:28.085+00:00", "seq": 13, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 0, "id": "fill_member_number", "action": "fill", "value": "{{param.member_id}}", "locator_used": 0, "locator": "row_label", "source": "agent"}
+{"ts": "2026-11-20T22:53:28.094+00:00", "seq": 14, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "click_inquire", "action": "click", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:28.281+00:00", "seq": 15, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 1, "id": "click_inquire", "action": "click", "value": null, "locator_used": 0, "locator": "role", "source": "agent"}
+{"ts": "2026-11-20T22:53:28.291+00:00", "seq": 16, "run_id": "replay-20261120-165326-dc92", "type": "condition_detected", "code": "SYSTEM_NOTICE", "kind": "recoverable", "step": "click_inquire"}
+{"ts": "2026-11-20T22:53:28.292+00:00", "seq": 17, "run_id": "replay-20261120-165326-dc92", "type": "recovery", "code": "SYSTEM_NOTICE", "action": "dismiss", "attempt": 1, "step": "click_inquire"}
+{"ts": "2026-11-20T22:53:28.787+00:00", "seq": 18, "run_id": "replay-20261120-165326-dc92", "type": "expect_ok", "step": "click_inquire"}
+{"ts": "2026-11-20T22:53:28.792+00:00", "seq": 19, "run_id": "replay-20261120-165326-dc92", "type": "policy_check", "step": "extract_savings_balance", "action": "extract", "allowed": true, "risk": "safe", "reason": ""}
+{"ts": "2026-11-20T22:53:28.795+00:00", "seq": 20, "run_id": "replay-20261120-165326-dc92", "type": "step", "index": 2, "id": "extract_savings_balance", "action": "extract", "output": "savings_balance", "value": "1520.75", "locator_used": 0, "locator": "table_cell"}
+{"ts": "2026-11-20T22:53:28.846+00:00", "seq": 21, "run_id": "replay-20261120-165326-dc92", "type": "checkpoint_passed", "evidence": {"screenshot": "evidence/runs/replay-20261120-165326-dc92/shots/020-checkpoint.png"}}
+{"ts": "2026-11-20T22:53:28.847+00:00", "seq": 22, "run_id": "replay-20261120-165326-dc92", "type": "replay_end", "status": "success", "steps_completed": 3, "duration_ms": 1890}

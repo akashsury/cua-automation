@@ -1,0 +1,342 @@
+schema_version: '1.0'
+id: mockcore.open_share
+version: 1.0.0
+status: draft
+title: Open a new {{param.share_type}} share nicknamed {{param.nickname}} with an initial deposit of {{para
+description: Open a new {{param.share_type}} share nicknamed {{param.nickname}} with an initial deposit of {{param.deposit}}
+  for member {{param.member_id}}, reach the confirmation screen and return the confirmation number
+app:
+  vendor: MockCore
+  product: Member Services
+  version_range: '>=3.0 <4.0'
+  surface: legacy_web
+entry_url: /
+requires:
+- mockcore.sign_on
+risk: irreversible
+inputs:
+  member_id:
+    type: string
+    description: numeric identifier (5 digits; inferred from the discovery example — review)
+    pattern: ^\d{5}$
+    sensitive: false
+  share_type:
+    type: string
+    description: free text
+    sensitive: false
+  nickname:
+    type: string
+    description: free text
+    sensitive: false
+  deposit:
+    type: decimal
+    description: decimal amount
+    sensitive: false
+secrets: {}
+outputs:
+  confirmation_no:
+    type: string
+    description: Return the confirmation number.
+    sensitive: false
+steps:
+- id: fill_member_number
+  action: fill
+  description: Enter member number to look up member.
+  target:
+  - by: row_label
+    label: 'Member Number:'
+    control: input
+    frame: workarea
+  - by: css
+    selector: input[name="f1"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+    frame: workarea
+  value: '{{param.member_id}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: click_inquire
+  action: click
+  description: Submit member inquiry.
+  target:
+  - by: role
+    role: button
+    name: Inquire
+    frame: workarea
+  - by: css
+    selector: input[type="submit"][value="Inquire"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+    frame: workarea
+  expect:
+    all_of:
+    - type: url_matches
+      pattern: ^/app/member/{{param.member_id}}$
+      frame: workarea
+    - type: title_is
+      title: MEMBER DETAIL
+      frame: workarea
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 role: accessible role+name: survives layout/markup changes; maps to desktop a11y APIs | #2 css: submit
+    value | #3 css: structural path: last resort, breaks on any layout change'
+- id: click_open_new_share
+  action: click
+  description: Open new share form.
+  target:
+  - by: role
+    role: link
+    name: Open New Share
+    frame: workarea
+  - by: text
+    text: Open New Share
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)
+    frame: workarea
+  expect:
+    all_of:
+    - type: url_matches
+      pattern: ^/app/member/{{param.member_id}}/newshare$
+      frame: workarea
+    - type: title_is
+      title: OPEN NEW SHARE
+      frame: workarea
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 role: accessible role+name: survives layout/markup changes; maps to desktop a11y APIs | #2 text: exact
+    visible text | #3 css: structural path: last resort, breaks on any layout change'
+- id: select_share_type
+  action: select
+  description: Choose share type.
+  target:
+  - by: row_label
+    label: 'SHARE TYPE:'
+    control: select
+    frame: workarea
+  - by: css
+    selector: select[name="s1"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2)
+      > td:nth-of-type(2) > select:nth-of-type(1)
+    frame: workarea
+  value: '{{param.share_type}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: fill_nickname
+  action: fill
+  description: Enter nickname.
+  target:
+  - by: row_label
+    label: 'NICKNAME:'
+    control: input
+    frame: workarea
+  - by: css
+    selector: input[name="n1"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+    frame: workarea
+  value: '{{param.nickname}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: fill_initial_deposit
+  action: fill
+  description: Enter initial deposit.
+  target:
+  - by: row_label
+    label: 'INITIAL DEPOSIT:'
+    control: input
+    frame: workarea
+  - by: css
+    selector: input[name="a1"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(4)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+    frame: workarea
+  value: '{{param.deposit}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: click_continue
+  action: click
+  description: Proceed to next step.
+  target:
+  - by: role
+    role: button
+    name: Continue
+    frame: workarea
+  - by: css
+    selector: input[type="submit"][value="Continue"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(5)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+    frame: workarea
+  expect:
+    all_of:
+    - type: url_matches
+      pattern: ^/app/member/{{param.member_id}}/newshare$
+      frame: workarea
+    - type: title_is
+      title: REVIEW NEW SHARE
+      frame: workarea
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 role: accessible role+name: survives layout/markup changes; maps to desktop a11y APIs | #2 css: submit
+    value | #3 css: structural path: last resort, breaks on any layout change'
+- id: click_confirm
+  action: click
+  description: Confirm the reviewed share opening as requested.
+  target:
+  - by: role
+    role: button
+    name: Confirm
+    frame: workarea
+  - by: css
+    selector: input[type="submit"][value="Confirm"]
+    frame: workarea
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > input:nth-of-type(4)
+    frame: workarea
+  expect:
+    all_of:
+    - type: url_matches
+      pattern: ^/app/member/{{param.member_id}}/newshare/confirm$
+      frame: workarea
+    - type: title_is
+      title: SHARE OPENED
+      frame: workarea
+  risk: irreversible
+  source: agent
+  timeout_ms: 10000
+  why: '#1 role: accessible role+name: survives layout/markup changes; maps to desktop a11y APIs | #2 css: submit
+    value | #3 css: structural path: last resort, breaks on any layout change'
+- id: extract_confirmation_no
+  action: extract
+  description: Return the confirmation number.
+  target:
+  - by: anchor_next
+    anchor_text: 'CONFIRMATION NO:'
+    frame: workarea
+  output: confirmation_no
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: 'read by table column header + row text (or adjacent label): independent of row order and cell position'
+checkpoint:
+  all_of:
+  - type: text_visible
+    text: SHARE OPENED
+    match: contains
+    frame: workarea
+  - type: title_is
+    title: SHARE OPENED
+    frame: workarea
+  - type: url_matches
+    pattern: ^/app/member/{{param.member_id}}/newshare/confirm$
+    frame: workarea
+known_conditions:
+- code: MEMBER_NOT_FOUND
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: MBR NOT FOUND
+    match: contains
+  message: No member exists with that member number.
+- code: INVALID_MEMBER_NUMBER
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: INVALID MEMBER NUMBER
+    match: contains
+  message: The core system rejected the member number format.
+- code: INVALID_AMOUNT
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: (INVALID AMOUNT|MINIMUM OPENING DEPOSIT)
+    match: regex
+  message: The core system rejected the amount.
+- code: PERMISSION_DENIED
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: NOT AUTHORIZED FOR THIS FUNCTION
+    match: contains
+  message: The service account is not entitled to this function in the core system.
+- code: SYSTEM_NOTICE
+  kind: recoverable
+  detect:
+    type: title_is
+    title: SYSTEM NOTICE
+  message: Informational interstitial page.
+  recovery:
+    action: dismiss
+    target:
+    - by: role
+      role: link
+      name: Continue
+    - by: text
+      text: Continue
+    max_attempts: 2
+- code: SESSION_EXPIRED
+  kind: recoverable
+  detect:
+    type: text_visible
+    text: SESSION EXPIRED
+    match: contains
+  message: Core session timed out.
+  recovery:
+    action: relogin_restart
+    target: []
+    max_attempts: 1
+- code: PROCESSING
+  kind: recoverable
+  detect:
+    type: text_visible
+    text: PLEASE WAIT
+    match: contains
+  message: Core is still processing.
+  recovery:
+    action: wait
+    target: []
+    max_attempts: 3
+- code: CORE_SYSTEM_ERROR
+  kind: hard_failure
+  detect:
+    type: text_visible
+    text: SYSTEM ERROR
+    match: contains
+  message: The core system returned an internal error.
+provenance:
+  recorded_at: '2026-11-20T22:44:43+00:00'
+  discovery_run_id: discovery-20261120-164418-d854
+  model: claude-opus-5-5
+  human_steps: 0
+  notes: input patterns inferred from a single example

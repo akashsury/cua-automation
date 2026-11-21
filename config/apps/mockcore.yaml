@@ -1,0 +1,47 @@
+# App profile: knowledge about the vendor product shared by every capability and tenant.
+# The recorder copies these known conditions into each new artifact so the artifact is
+# self-contained and reviewable; a reviewer can prune or extend them per capability.
+app:
+  vendor: MockCore
+  product: Member Services
+  version_range: ">=3.0 <4.0"
+  surface: legacy_web
+known_conditions:
+  - code: MEMBER_NOT_FOUND
+    kind: business_outcome
+    detect: {type: text_visible, text: "MBR NOT FOUND"}
+    message: No member exists with that member number.
+  - code: INVALID_MEMBER_NUMBER
+    kind: business_outcome
+    detect: {type: text_visible, text: "INVALID MEMBER NUMBER"}
+    message: The core system rejected the member number format.
+  - code: INVALID_AMOUNT
+    kind: business_outcome
+    detect: {type: text_visible, text: "(INVALID AMOUNT|MINIMUM OPENING DEPOSIT)", match: regex}
+    message: The core system rejected the amount.
+  - code: PERMISSION_DENIED
+    kind: business_outcome
+    detect: {type: text_visible, text: "NOT AUTHORIZED FOR THIS FUNCTION"}
+    message: The service account is not entitled to this function in the core system.
+  - code: SYSTEM_NOTICE
+    kind: recoverable
+    detect: {type: title_is, title: "SYSTEM NOTICE"}
+    message: Informational interstitial page.
+    recovery:
+      action: dismiss
+      target: [{by: role, role: link, name: Continue}, {by: text, text: Continue}]
+      max_attempts: 2
+  - code: SESSION_EXPIRED
+    kind: recoverable
+    detect: {type: text_visible, text: "SESSION EXPIRED"}
+    message: Core session timed out.
+    recovery: {action: relogin_restart, max_attempts: 1}
+  - code: PROCESSING
+    kind: recoverable
+    detect: {type: text_visible, text: "PLEASE WAIT"}
+    message: Core is still processing.
+    recovery: {action: wait, max_attempts: 3}
+  - code: CORE_SYSTEM_ERROR
+    kind: hard_failure
+    detect: {type: text_visible, text: "SYSTEM ERROR"}
+    message: The core system returned an internal error.

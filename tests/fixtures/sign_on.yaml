@@ -1,0 +1,36 @@
+# Hand-written TEST fixture (not produced by discovery) used by the offline test-suite.
+schema_version: "1.0"
+id: mockcore.sign_on
+version: 1.0.0
+status: approved
+title: Sign on to MockCore
+description: Sign on with the service account and land on Member Inquiry.
+app: {vendor: MockCore, product: Member Services, version_range: ">=3.0 <4.0", surface: legacy_web}
+entry_url: /login
+risk: read_only
+secrets:
+  mockbank_user: {provider: env, key: MOCKBANK_USER}
+  mockbank_password: {provider: env, key: MOCKBANK_PASSWORD}
+steps:
+  - id: user_id
+    action: fill
+    description: Enter user id
+    value: "{{secret.mockbank_user}}"
+    target: [{by: row_label, label: "USER ID:"}, {by: css, selector: 'input[name="u1"]'}]
+  - id: password
+    action: fill
+    description: Enter password
+    value: "{{secret.mockbank_password}}"
+    target: [{by: row_label, label: "PASSWORD:"}, {by: css, selector: 'input[name="p1"]'}]
+  - id: sign_on
+    action: click
+    description: Click Sign On
+    target: [{by: role, role: button, name: Sign On}]
+    expect: {all_of: [{type: title_is, title: MEMBER INQUIRY, frame: workarea}]}
+checkpoint: {all_of: [{type: title_is, title: MEMBER INQUIRY, frame: workarea}]}
+known_conditions:
+  - code: BAD_CREDENTIALS
+    kind: hard_failure
+    detect: {type: text_visible, text: INVALID USER ID OR PASSWORD}
+    message: Service account credentials rejected.
+provenance: {recorded_at: "2026-11-14T00:00:00Z", discovery_run_id: hand-written-fixture}

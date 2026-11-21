@@ -1,0 +1,38 @@
+# Hand-written TEST fixture (not produced by discovery) used by the offline test-suite.
+schema_version: "1.0"
+id: mockcore.lookup_member_balance
+version: 1.0.0
+status: approved
+title: Look up a member's savings balance
+description: Inquire on a member and read the balance of their SAVINGS share.
+app: {vendor: MockCore, product: Member Services, version_range: ">=3.0 <4.0", surface: legacy_web}
+entry_url: /
+requires: [mockcore.sign_on]
+risk: read_only
+inputs:
+  member_id: {type: string, pattern: '^\d{5}$', description: 5-digit member number}
+outputs:
+  savings_balance: {type: decimal, description: Balance of the SAVINGS share in USD}
+steps:
+  - id: member_number
+    action: fill
+    description: Enter the member number
+    value: "{{param.member_id}}"
+    target:
+      - {by: role, role: textbox, name: Member Number, frame: workarea}
+      - {by: row_label, label: "Member Number:", frame: workarea}
+      - {by: css, selector: 'input[name="f1"]', frame: workarea}
+  - id: inquire
+    action: click
+    description: Run the inquiry
+    timeout_ms: 3000
+    target: [{by: role, role: button, name: Inquire, frame: workarea}, {by: css, selector: 'input[type="submit"]', frame: workarea}]
+    expect: {all_of: [{type: url_matches, pattern: '^/app/member/{{param.member_id}}$', frame: workarea}]}
+  - id: savings_balance
+    action: extract
+    description: Read the SAVINGS balance
+    output: savings_balance
+    target: [{by: table_cell, column: BALANCE, row_match: SAVINGS, frame: workarea}]
+checkpoint: {all_of: [{type: title_is, title: MEMBER DETAIL, frame: workarea}]}
+known_conditions: []   # filled from config/apps/mockcore.yaml by the test
+provenance: {recorded_at: "2026-11-14T00:00:00Z", discovery_run_id: hand-written-fixture}

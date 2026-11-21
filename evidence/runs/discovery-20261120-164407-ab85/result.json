@@ -1,0 +1,13 @@
+{
+  "run_id": "discovery-[REDACTED:card]ab85",
+  "status": "success",
+  "stop_reason": "goal_met",
+  "steps": 3,
+  "usage": {
+    "input_tokens": 13198,
+    "output_tokens": 510,
+    "model_calls": 4
+  },
+  "evidence_dir": "evidence/runs/discovery-[REDACTED:card]ab85",
+  "artifact": "artifacts/mockcore.lookup_member_balance/1.0.0.yaml"
+}

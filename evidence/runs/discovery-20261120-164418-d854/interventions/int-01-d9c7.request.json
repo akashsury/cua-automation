@@ -1,0 +1,40 @@
+{
+  "id": "int-01-d9c7",
+  "run_id": "discovery-[REDACTED:card]d854",
+  "kind": "approval",
+  "subject": "Open a new SAVINGS share nicknamed VACATION with an initial deposit of 25.00 for member 23456, reach the confirmation screen and return the confirmation number",
+  "reason": "agent wants to click 'Confirm' (irreversible)",
+  "step": {
+    "tool": "click",
+    "element": "Confirm",
+    "reason": "Confirm the reviewed share opening as requested."
+  },
+  "url": "http://127.0.0.1:8765/app/member/23456/newshare",
+  "observed": {
+    "frames": [
+      {
+        "frame": null,
+        "path": "/",
+        "title": "MOCKCORE MEMBER SERVICES",
+        "text": "MOCKCORE MEMBER SERVICES v3.2\tLAKESIDE COMMUNITY CU"
+      },
+      {
+        "frame": "workarea",
+        "path": "/app/member/23456/newshare",
+        "title": "REVIEW NEW SHARE",
+        "text": "REVIEW NEW SHARE\n\nPLEASE REVIEW. THIS ACTION CANNOT BE UNDONE.\n\nMEMBER\t23456\nSHARE TYPE\tSAVINGS\nNICKNAME\tVACATION\nINITIAL DEPOSIT\t$25.00\n\n Back"
+      }
+    ]
+  },
+  "evidence": {
+    "screenshot": "evidence/runs/discovery-[REDACTED:card]d854/shots/042-intervention-approval.png",
+    "dom": "evidence/runs/discovery-[REDACTED:card]d854/dom/042-intervention-approval.html"
+  },
+  "options": [
+    "approve",
+    "deny",
+    "abort"
+  ],
+  "assigned_to": "operator-queue",
+  "created_at": "2026-11-20T22:44:38+00:00"
+}

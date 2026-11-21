@@ -1,0 +1,3 @@
+[{"kind": "replay_failure", "decision": "resume",
+  "notes": "Simulated supervisor acknowledged the override prompt in the live session.",
+  "actions": [{"click": [{"by": "role", "role": "button", "name": "Acknowledge"}]}]}]

@@ -1,0 +1,25 @@
+# Safety policy enforced on every action (discovery, replay and operator-through-API).
+allowed_origins:
+  - http://127.0.0.1:8765
+  - http://localhost:8765
+allowed_paths:          # regexes over the URL path
+  - ^/$
+  - ^/login$
+  - ^/app/
+blocked_paths:
+  - ^/__                # test hooks are never reachable by the agent
+  - ^/app/admin
+allowed_actions: [click, fill, select, extract, navigate, type_secret]
+irreversible_text:      # regexes over the clicked control's accessible name / text
+  - ^\s*confirm\b
+  - \bsubmit payment\b
+  - \btransfer\b
+  - \bdelete\b
+  - \bclose account\b
+irreversible_paths: []
+irreversible_mode: require_approval   # block | require_approval | flag
+secrets:                # names the agent may *reference*; values come from the environment
+  mockbank_user: {provider: env, key: MOCKBANK_USER}
+  mockbank_password: {provider: env, key: MOCKBANK_PASSWORD}
+max_steps: 30
+timeout_s: 300

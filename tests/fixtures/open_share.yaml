@@ -1,0 +1,53 @@
+# Hand-written TEST fixture (not produced by discovery) used by the offline test-suite.
+schema_version: "1.0"
+id: mockcore.open_share
+version: 1.0.0
+status: approved
+title: Open a new share for a member
+description: Open a new share of the given type with an opening deposit and return the confirmation number.
+app: {vendor: MockCore, product: Member Services, version_range: ">=3.0 <4.0", surface: legacy_web}
+entry_url: /
+requires: [mockcore.sign_on]
+risk: irreversible
+inputs:
+  member_id: {type: string, pattern: '^\d{5}$'}
+  share_type: {type: enum, enum: [SAVINGS, MONEY MARKET, CERTIFICATE]}
+  nickname: {type: string}
+  deposit: {type: decimal}
+outputs:
+  confirmation_no: {type: string}
+steps:
+  - {id: member_number, action: fill, description: member number, value: "{{param.member_id}}",
+     target: [{by: row_label, label: "Member Number:", frame: workarea}]}
+  - id: inquire
+    action: click
+    description: inquire
+    timeout_ms: 3000
+    target: [{by: role, role: button, name: Inquire, frame: workarea}]
+    expect: {all_of: [{type: title_is, title: MEMBER DETAIL, frame: workarea}]}
+  - id: open_new_share
+    action: click
+    description: open the new-share form
+    target: [{by: role, role: link, name: Open New Share, frame: workarea}]
+    expect: {all_of: [{type: title_is, title: OPEN NEW SHARE, frame: workarea}]}
+  - {id: share_type, action: select, description: share type, value: "{{param.share_type}}",
+     target: [{by: row_label, label: "SHARE TYPE:", control: select, frame: workarea}]}
+  - {id: nickname, action: fill, description: nickname, value: "{{param.nickname}}",
+     target: [{by: row_label, label: "NICKNAME:", frame: workarea}]}
+  - {id: deposit, action: fill, description: opening deposit, value: "{{param.deposit}}",
+     target: [{by: row_label, label: "INITIAL DEPOSIT:", frame: workarea}]}
+  - id: continue
+    action: click
+    description: continue to review
+    target: [{by: role, role: button, name: Continue, frame: workarea}]
+    expect: {all_of: [{type: title_is, title: REVIEW NEW SHARE, frame: workarea}]}
+  - id: confirm
+    action: click
+    risk: irreversible
+    description: confirm opening the share
+    target: [{by: role, role: button, name: Confirm, frame: workarea}]
+    expect: {all_of: [{type: title_is, title: SHARE OPENED, frame: workarea}]}
+  - {id: confirmation, action: extract, description: confirmation number, output: confirmation_no,
+     target: [{by: anchor_next, anchor_text: "CONFIRMATION NO:", frame: workarea}]}
+checkpoint: {all_of: [{type: title_is, title: SHARE OPENED, frame: workarea}]}
+provenance: {recorded_at: "2026-11-14T00:00:00Z", discovery_run_id: hand-written-fixture}

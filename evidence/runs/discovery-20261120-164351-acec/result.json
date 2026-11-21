@@ -1,0 +1,13 @@
+{
+  "run_id": "discovery-[REDACTED:card]acec",
+  "status": "success",
+  "stop_reason": "goal_met",
+  "steps": 3,
+  "usage": {
+    "input_tokens": 12899,
+    "output_tokens": 584,
+    "model_calls": 4
+  },
+  "evidence_dir": "evidence/runs/discovery-[REDACTED:card]acec",
+  "artifact": "artifacts/mockcore.sign_on/1.0.0.yaml"
+}

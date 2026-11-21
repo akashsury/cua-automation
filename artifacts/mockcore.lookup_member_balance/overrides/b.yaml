@@ -1,0 +1,11 @@
+# Tenant override: PRAIRIE CU runs the same MockCore 3.x product with relabelled screens.
+# Tenant-specific locators are tried first; the base artifact's locators stay as fallbacks.
+# Reviewed by hand after replay 30 reported locator_degraded on these two steps.
+tenant: b
+steps:
+  fill_member_number:
+    prepend_target:
+      - {by: row_label, label: "Acct/Member #:", control: input, frame: workarea}
+  click_inquire:
+    prepend_target:
+      - {by: role, role: button, name: Search, frame: workarea}

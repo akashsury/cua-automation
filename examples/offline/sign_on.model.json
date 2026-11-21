@@ -1,0 +1,6 @@
+[
+  {"tool": "type_secret", "input": {"element": 1, "secret": "mockbank_user", "reason": "enter user id"}},
+  {"tool": "type_secret", "input": {"element": 2, "secret": "mockbank_password", "reason": "enter password"}},
+  {"tool": "click", "input": {"element": 3, "reason": "sign on"}},
+  {"tool": "finish", "input": {"status": "success", "summary": "signed on", "checkpoint_text": "MEMBER INQUIRY"}}
+]

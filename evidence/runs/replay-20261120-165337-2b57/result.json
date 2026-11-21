@@ -1,0 +1,46 @@
+{
+  "run_id": "replay-20261120-165337-2b57",
+  "capability": "mockcore.lookup_member_balance@1.0.0",
+  "status": "failed",
+  "outputs": {},
+  "outcome": null,
+  "failure": {
+    "category": "expectation_timeout",
+    "message": "step click_inquire: expected state not reached within 10000 ms",
+    "step_id": "click_inquire",
+    "step_index": 1,
+    "code": null,
+    "expected": [
+      "{\"type\":\"url_matches\",\"pattern\":\"^/app/member/{{param.member_id}}$\",\"frame\":\"workarea\"}",
+      "{\"type\":\"title_is\",\"title\":\"MEMBER DETAIL\",\"frame\":\"workarea\"}"
+    ],
+    "observed": {
+      "frames": [
+        {
+          "frame": null,
+          "path": "/",
+          "title": "MOCKCORE MEMBER SERVICES",
+          "text": "MOCKCORE MEMBER SERVICES v3.2\tLAKESIDE COMMUNITY CU"
+        },
+        {
+          "frame": "workarea",
+          "path": "/app/search",
+          "title": "SUPERVISOR OVERRIDE",
+          "text": "SUPERVISOR OVERRIDE\n\nINQUIRY ON THIS ACCOUNT REQUIRES SUPERVISOR ACKNOWLEDGEMENT (POLICY 7.2)."
+        }
+      ]
+    },
+    "url": "http://127.0.0.1:8765/app/search",
+    "locator_attempts": null,
+    "evidence": {
+      "screenshot": "evidence/runs/replay-20261120-165337-2b57/shots/015-failure-expectation_timeout.png",
+      "dom": "evidence/runs/replay-20261120-165337-2b57/dom/015-failure-expectation_timeout.html"
+    }
+  },
+  "recoveries": [],
+  "warnings": [],
+  "interventions": [],
+  "steps_completed": 0,
+  "duration_ms": 11497,
+  "evidence_dir": "evidence/runs/replay-20261120-165337-2b57"
+}

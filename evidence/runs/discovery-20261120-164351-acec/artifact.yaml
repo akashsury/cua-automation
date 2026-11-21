@@ -1,0 +1,176 @@
+schema_version: '1.0'
+id: mockcore.sign_on
+version: 1.0.0
+status: draft
+title: Sign on to the core system with the service account and reach the Member Inquiry screen
+description: Sign on to the core system with the service account and reach the Member Inquiry screen
+app:
+  vendor: MockCore
+  product: Member Services
+  version_range: '>=3.0 <4.0'
+  surface: legacy_web
+entry_url: /login
+requires: []
+risk: read_only
+inputs: {}
+secrets:
+  mockbank_password:
+    provider: env
+    key: MOCKBANK_PASSWORD
+  mockbank_user:
+    provider: env
+    key: MOCKBANK_USER
+outputs: {}
+steps:
+- id: fill_user_id
+  action: fill
+  description: Enter service account user ID.
+  target:
+  - by: row_label
+    label: 'USER ID:'
+    control: input
+  - by: css
+    selector: input[name="u1"]
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+  value: '{{secret.mockbank_user}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: fill_password
+  action: fill
+  description: Enter service account password.
+  target:
+  - by: row_label
+    label: 'PASSWORD:'
+    control: input
+  - by: css
+    selector: input[name="p1"]
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+  value: '{{secret.mockbank_password}}'
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 row_label: legacy form: no accessible name, anchored on the visible label in the same table row | #2
+    css: form field name attribute: stable within a product version, opaque to humans | #3 css: structural path:
+    last resort, breaks on any layout change'
+- id: click_sign_on
+  action: click
+  description: Submit sign on.
+  target:
+  - by: role
+    role: button
+    name: Sign On
+  - by: css
+    selector: input[type="submit"][value="Sign On"]
+  - by: css
+    selector: body:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3)
+      > td:nth-of-type(2) > input:nth-of-type(1)
+  expect:
+    all_of:
+    - type: url_matches
+      pattern: ^/$
+    - type: title_is
+      title: MOCKCORE MEMBER SERVICES
+  risk: safe
+  source: agent
+  timeout_ms: 10000
+  why: '#1 role: accessible role+name: survives layout/markup changes; maps to desktop a11y APIs | #2 css: submit
+    value | #3 css: structural path: last resort, breaks on any layout change'
+checkpoint:
+  all_of:
+  - type: text_visible
+    text: MEMBER INQUIRY
+    match: contains
+    frame: workarea
+  - type: title_is
+    title: MEMBER INQUIRY
+    frame: workarea
+  - type: url_matches
+    pattern: ^/app/search$
+    frame: workarea
+known_conditions:
+- code: MEMBER_NOT_FOUND
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: MBR NOT FOUND
+    match: contains
+  message: No member exists with that member number.
+- code: INVALID_MEMBER_NUMBER
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: INVALID MEMBER NUMBER
+    match: contains
+  message: The core system rejected the member number format.
+- code: INVALID_AMOUNT
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: (INVALID AMOUNT|MINIMUM OPENING DEPOSIT)
+    match: regex
+  message: The core system rejected the amount.
+- code: PERMISSION_DENIED
+  kind: business_outcome
+  detect:
+    type: text_visible
+    text: NOT AUTHORIZED FOR THIS FUNCTION
+    match: contains
+  message: The service account is not entitled to this function in the core system.
+- code: SYSTEM_NOTICE
+  kind: recoverable
+  detect:
+    type: title_is
+    title: SYSTEM NOTICE
+  message: Informational interstitial page.
+  recovery:
+    action: dismiss
+    target:
+    - by: role
+      role: link
+      name: Continue
+    - by: text
+      text: Continue
+    max_attempts: 2
+- code: SESSION_EXPIRED
+  kind: recoverable
+  detect:
+    type: text_visible
+    text: SESSION EXPIRED
+    match: contains
+  message: Core session timed out.
+  recovery:
+    action: relogin_restart
+    target: []
+    max_attempts: 1
+- code: PROCESSING
+  kind: recoverable
+  detect:
+    type: text_visible
+    text: PLEASE WAIT
+    match: contains
+  message: Core is still processing.
+  recovery:
+    action: wait
+    target: []
+    max_attempts: 3
+- code: CORE_SYSTEM_ERROR
+  kind: hard_failure
+  detect:
+    type: text_visible
+    text: SYSTEM ERROR
+    match: contains
+  message: The core system returned an internal error.
+provenance:
+  recorded_at: '2026-11-20T22:44:05+00:00'
+  discovery_run_id: discovery-20261120-164351-acec
+  model: claude-opus-5-5
+  human_steps: 0
+  notes: input patterns inferred from a single example

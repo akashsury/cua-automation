@@ -1,0 +1,8 @@
+{
+  "request_id": "int-01-d9c7",
+  "decision": "approve",
+  "operator": "scripted-operator (simulated human)",
+  "notes": "Simulated supervisor: reviewed member, share type and amount on the review screen; approved.",
+  "human_actions": [],
+  "duration_s": 0.3
+}
