@@ -1,0 +1,34 @@
+{
+  "run_id": "replay-20261122-181732-145b",
+  "capability": "mockcore.lookup_member_balance@1.0.0",
+  "status": "failed",
+  "outputs": {},
+  "outcome": null,
+  "failure": {
+    "category": "invalid_input",
+    "message": "input 'member_id' does not match pattern ^\\d{5}$",
+    "step_id": null,
+    "step_index": null,
+    "code": null,
+    "expected": {
+      "member_id": {
+        "type": "string",
+        "description": "numeric identifier (5 digits; inferred from the discovery example — review)",
+        "pattern": "^\\d{5}$",
+        "sensitive": false
+      }
+    },
+    "observed": {
+      "member_id": "12AB"
+    },
+    "url": null,
+    "locator_attempts": null,
+    "evidence": {}
+  },
+  "recoveries": [],
+  "warnings": [],
+  "interventions": [],
+  "steps_completed": 0,
+  "duration_ms": 322,
+  "evidence_dir": "evidence/runs/replay-20261122-181732-145b"
+}

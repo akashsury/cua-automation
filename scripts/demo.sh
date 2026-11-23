@@ -58,6 +58,10 @@ run 22-replay-open-share-denied-perm replay $O $P --approve-irreversible --injec
 # 21 gave member 12345 a second SAVINGS share, so "the savings balance" is now ambiguous:
 # replay must refuse to guess (locator_ambiguous) rather than return the wrong row.
 run 23-replay-ambiguous-after-change replay $L --param member_id=12345
+# Core-side validation error (deposit below the $5.00 minimum): a business outcome, raised at
+# Continue, i.e. before the irreversible Confirm step, so nothing is submitted.
+run 24-replay-validation-error replay $O --param member_id=12345 --param share_type=SAVINGS \
+    --param nickname=TRAVEL --param deposit=1.00
 
 # Tenant B: same vendor product, different labels/branding.
 start_app b

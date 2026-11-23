@@ -25,6 +25,7 @@ def test_success_with_degraded_locator_warning(reset, policy_path):
 def test_not_found_is_business_outcome(reset, policy_path):
     r = run(reset, policy_path, load_fixture("lookup.yaml"), {"member_id": "99999"})
     assert r.status == "business_outcome" and r.outcome.code == "MEMBER_NOT_FOUND" and r.failure is None
+    assert r.outcome.step_id == "inquire" and r.steps_completed == 1  # fill done, stopped at inquire
 
 
 def test_invalid_input_rejected_before_touching_ui(reset, policy_path):

@@ -42,7 +42,25 @@ The **recorder** turns the trace into a `draft` artifact:
 - A reviewer then runs `cua show` and `cua approve`.
 
 **Replay** (`cua/replay/engine.py`) is plain Python + Playwright. The recorded discoveries used
-4–10 model calls each; the 16 replays used **zero**.
+4–10 model calls each; the 17 replays used **zero**.
+
+**Key decisions and trade-offs**
+
+- **The model sees a text list of elements, not a screenshot.** Each element is described by
+  role, name, row label and frame.
+  - *For:* cheap, exact, and the element number maps straight to a recordable locator.
+  - *Against:* it needs an accessibility or DOM layer. Surfaces with no such layer would need a
+    vision locator kind (see Heterogeneity).
+- **A local mock core app as the target.** It is deliberately hostile: an iframe work area, table
+  layouts, no labels, no test ids. A public site can't safely inject session expiry, server errors
+  or permission denials. We control the app, so every error class is reproducible.
+- **One action per model turn**, each checked by the guard before it runs.
+  - *For:* every action is auditable and can be stopped.
+  - *Against:* more model calls than batching actions would need.
+- **Single process, synchronous, with artifacts as files in git.** Easy to review in a pull
+  request and easy to diff between versions. A registry and a worker pool are deferred (Cuts).
+- **The surface interface is the only DOM-aware code**, so the artifact, engine, guard and
+  handoff carry no browser assumptions.
 
 ## Artifact schema
 
@@ -105,7 +123,7 @@ Replay runs in a fixed order:
 
 | Kind | Meaning | Demo runs | Result |
 |---|---|---|---|
-| `business_outcome` | A correct answer the caller must handle | MEMBER_NOT_FOUND (12), PERMISSION_DENIED (22) | `business_outcome` + `outcome.code`, exit 2 |
+| `business_outcome` | A correct answer the caller must handle | MEMBER_NOT_FOUND (12), PERMISSION_DENIED (22), INVALID_AMOUNT validation error (24) | `business_outcome` + `outcome.code`, exit 2 |
 | `recoverable` | Transient; declared recovery with an attempt limit | SYSTEM_NOTICE → `dismiss` (14), SESSION_EXPIRED → `relogin_restart` (15) | Continues; logged in `recoveries[]` |
 | `hard_failure` | Known bad state | CORE_SYSTEM_ERROR (17) | `failed / known_hard_failure` |
 | *(unknown)* | Postcondition not met, no known condition matches | SUPERVISOR OVERRIDE page (18) | Escalates if an operator exists (19), else `failed / expectation_timeout` |
@@ -210,6 +228,14 @@ view of the session.
   approval or an explicit `--approve-irreversible`; otherwise the result is
   `failed / approval_required` and nothing is submitted (run 20). Drafts replay with a warning;
   `--require-approved` refuses them.
+
+  *Why require approval, rather than block or flag:*
+  - **Blocking** would make the most valuable capabilities, the ones that change something,
+    unusable.
+  - **Flagging** only records the action after it has already happened, which can't be undone in
+    a bank system.
+  - **Requiring approval** keeps those actions possible and puts a named decision before them.
+    The approval is captured in the evidence.
 - **Redaction** is applied in the logger *and* in the result builder, so stdout, calling agents and
   files all get the same protection:
   1. exact secret values → `[SECRET:name]`
@@ -239,5 +265,11 @@ OCR-checked. Production needs field classification and encrypted evidence with r
 - **Scale:** a single process and session. There's no worker pool, session pooling or rate limiting
   against the core system, and the store is files, not a signed registry with access control.
 - **Approvals** are a flag or an operator decision, not four-eyes approval tied to an identity.
-- **Stretch, partly done:** `cua list` / `cua catalog-tools` render the catalog as LLM tool
-  definitions, but no agent calls them end to end.
+- **Stretch goals:**
+  - **Done: cross-tenant reuse with per-variant overrides.** One base artifact replayed on
+    tenant B: degraded without the override (run 30), clean with it (run 31). Routes and values
+    are canonicalised into parameters, e.g. `^/app/member/{{param.member_id}}$`.
+  - **Partly done: approval gating.** draft → approved, with `--require-approved` for unattended
+    runs. There's no reliability score yet.
+  - **Partly done: agent-facing catalog.** `cua list` / `cua catalog-tools` render capabilities as
+    LLM tool definitions, but no agent calls them end to end.

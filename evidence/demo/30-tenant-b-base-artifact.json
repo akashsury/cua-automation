@@ -1,5 +1,5 @@
 {
-  "run_id": "replay-20261120-165423-b0f5",
+  "run_id": "replay-20261122-181834-db5a",
   "capability": "mockcore.lookup_member_balance@1.0.0",
   "status": "success",
   "outputs": {
@@ -12,6 +12,6 @@
   ],
   "interventions": [],
   "steps_completed": 3,
-  "duration_ms": 1502,
-  "evidence_dir": "evidence/runs/replay-20261120-165423-b0f5"
+  "duration_ms": 1540,
+  "evidence_dir": "evidence/runs/replay-20261122-181834-db5a"
 }

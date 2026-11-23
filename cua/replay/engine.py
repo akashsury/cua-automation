@@ -126,6 +126,7 @@ class ReplayEngine:
         self.dependencies = dependencies or {}
         self.recoveries: list[dict] = []
         self.warnings: list[str] = []
+        self._completed = 0  # steps of the current attempt finished so far (reported even on early stop)
 
     # ------------------------------------------------------------------ public API
     def run(self, cap: Capability, params: dict[str, str]) -> ReplayResult:
@@ -165,6 +166,7 @@ class ReplayEngine:
             log.event("checkpoint_passed", evidence=ev)
             return self._result(cap, "success", outputs=outputs, completed=completed)
         except _Stop as stop:
+            completed = self._completed
             if stop.kind == "business_outcome":
                 log.event("business_outcome", **stop.payload.model_dump())
                 return self._result(cap, "business_outcome", outcome=stop.payload, outputs=outputs, completed=completed)
@@ -229,6 +231,7 @@ class ReplayEngine:
         i = 0
         retried: set[int] = set()
         while i < len(cap.steps):
+            self._completed = i
             step = cap.steps[i]
             self._scan_conditions(cap, params, step, i)  # interstitials / expiry before acting
             self._enforce_policy(step, params, secrets, i)

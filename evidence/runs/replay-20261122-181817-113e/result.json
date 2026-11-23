@@ -1,0 +1,55 @@
+{
+  "run_id": "replay-20261122-181817-113e",
+  "capability": "mockcore.lookup_member_balance@1.0.0",
+  "status": "failed",
+  "outputs": {},
+  "outcome": null,
+  "failure": {
+    "category": "locator_ambiguous",
+    "message": "step extract_savings_balance: target ambiguous",
+    "step_id": "extract_savings_balance",
+    "step_index": 2,
+    "code": null,
+    "expected": [
+      {
+        "by": "table_cell",
+        "column": "BALANCE",
+        "row_match": "SAVINGS",
+        "frame": "workarea"
+      }
+    ],
+    "observed": {
+      "frames": [
+        {
+          "frame": null,
+          "path": "/",
+          "title": "MOCKCORE MEMBER SERVICES",
+          "text": "MOCKCORE MEMBER SERVICES v3.2\tLAKESIDE COMMUNITY CU"
+        },
+        {
+          "frame": "workarea",
+          "path": "/app/member/12345",
+          "title": "MEMBER DETAIL",
+          "text": "MEMBER DETAIL\nMEMBER:\t12345\nNAME:\tJANE Q SAMPLE\nSSN:\t[REDACTED:ssn]\nMEMBER SINCE:\t03/14/2011\n\n\nSHARE\tTYPE\tNICKNAME\tBALANCE\n0000\tSAVINGS\tPRIMARY SAVINGS\t$1,520.75\n0010\tCHECKING\tEVERYDAY\t$342.10\n0030\tSAVINGS\tTRAVEL\t$40.00\n\nOpen New Share   Back to Inquiry"
+        }
+      ]
+    },
+    "url": "http://127.0.0.1:8765/app/member/12345",
+    "locator_attempts": [
+      [
+        "{\"by\": \"table_cell\", \"column\": \"BALANCE\", \"row_match\": \"SAVINGS\", \"frame\": \"workarea\"}",
+        2
+      ]
+    ],
+    "evidence": {
+      "screenshot": "evidence/runs/replay-20261122-181817-113e/shots/017-failure-locator_ambiguous.png",
+      "dom": "evidence/runs/replay-20261122-181817-113e/dom/017-failure-locator_ambiguous.html"
+    }
+  },
+  "recoveries": [],
+  "warnings": [],
+  "interventions": [],
+  "steps_completed": 2,
+  "duration_ms": 11733,
+  "evidence_dir": "evidence/runs/replay-20261122-181817-113e"
+}

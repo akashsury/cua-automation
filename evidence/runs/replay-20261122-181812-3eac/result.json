@@ -1,0 +1,18 @@
+{
+  "run_id": "replay-20261122-181812-3eac",
+  "capability": "mockcore.open_share@1.0.0",
+  "status": "success",
+  "outputs": {
+    "confirmation_no": "C-70001"
+  },
+  "outcome": null,
+  "failure": null,
+  "recoveries": [],
+  "warnings": [
+    "capability mockcore.open_share@1.0.0 is draft, not approved"
+  ],
+  "interventions": [],
+  "steps_completed": 9,
+  "duration_ms": 2914,
+  "evidence_dir": "evidence/runs/replay-20261122-181812-3eac"
+}

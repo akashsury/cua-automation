@@ -127,7 +127,7 @@ cua discover --id mockcore.sign_on --entry /login --model scripted:examples/offl
 ### Full demo (regenerates `evidence/`)
 
 ```bash
-./scripts/demo.sh                    # starts the mock app; 3 live discoveries + 16 replays (~3 min, < $1)
+./scripts/demo.sh                    # starts the mock app; 3 live discoveries + 17 replays (~3 min, < $1)
 SKIP_DISCOVERY=1 ./scripts/demo.sh   # replays only: no key, no cost
 ```
 
